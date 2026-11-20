@@ -656,7 +656,7 @@ input[type=range]{padding:0;accent-color:var(--accent)}
   <section class="feat top3" aria-label="Top 3 battle entries this month">
     <div class="feat-h">
       <div><div class="eyebrow">Ranked by fan votes and judges</div><h3 class="chrome feat-t" id="topTitle">Top 3 battle entries</h3></div>
-      <a class="btn ghost" href="#leaderboard">Full leaderboard</a>
+      <a class="btn ghost" href="#leaderboard" id="topLink">Full leaderboard</a>
     </div>
     <div class="podium" id="podium"></div>
   </section>
@@ -2679,20 +2679,35 @@ function vCard(v, small){
 }
 function renderFeatured(){
   const g = $('#restGrid'); if (!g) return;
-  g.innerHTML = VIDEOS.slice().sort((a, b) => (a.featured || 99) - (b.featured || 99)).map(v => vCard(v)).join('');
+  const realTop = typeof ranked === 'function' && ranked().filter(e => !e.sample && e.url).length >= 3;
+  g.innerHTML = VIDEOS.filter(v => realTop || !(v.top >= 1 && v.top <= 3)).sort((a, b) => (a.featured || 99) - (b.featured || 99)).map(v => vCard(v)).join('');
   $('#libBtn').textContent = `See all videos in Discover (${VIDEOS.length})`;
 }
 function renderTop3(){
   const el = $('#podium'); if (!el) return;
   const month = new Date().toLocaleString('en-US', {month:'long', year:'numeric'});
-  $('#topTitle').textContent = `Top 3 battle entries · ${month}`;
-  el.innerHTML = ranked().slice(0, 3).map((e, i) => { const r = i + 1;
+  const real = ranked().filter(e => !e.sample && e.url);
+  const eb = $('#topTitle').previousElementSibling, fl = $('#topLink');
+  if (real.length < 3) {
+    /* Until Season 1 has three real entries with video, show the month's top videos. */
+    $('#topTitle').textContent = `Top 3 videos · ${month}`; if (eb) eb.textContent = 'Picked by AI Battles this month';
+    if (fl) { fl.textContent = 'See all videos'; fl.setAttribute('href', '#discover'); }
+    const top = VIDEOS.filter(v => v.top >= 1 && v.top <= 3).sort((a, b) => a.top - b.top).slice(0, 3);
+    el.innerHTML = top.map(v => `<button type="button" class="pod r${v.top}" data-vid="${esc(v.id)}" aria-label="Number ${v.top}: play ${esc(v.title)}">
+      <span class="th" style="background-image:url('${vPoster(v)}')"><span class="rk">#${v.top}</span><span class="pl">▶</span>${v.dur ? `<span class="du">${esc(v.dur)}</span>` : ''}</span>
+      <span style="display:flex;flex-direction:column;gap:4px;min-width:0"><span class="tt">${esc(v.title)}</span><small>${esc([v.artist, v.label].filter(Boolean).join(' · '))}</small></span></button>`).join('');
+    return;
+  }
+  $('#topTitle').textContent = `Top 3 battle entries · ${month}`; if (eb) eb.textContent = 'Ranked by fan votes and judges';
+  if (fl) { fl.textContent = 'Full leaderboard'; fl.setAttribute('href', '#leaderboard'); }
+  el.innerHTML = real.slice(0, 3).map((e, i) => { const r = i + 1;
     const bg = e.poster ? `background-image:url('${e.poster}')` : `background:linear-gradient(135deg,hsl(${e.hue[0]} 70% 45%),hsl(${e.hue[1]} 65% 22%))`;
     return `<a class="pod r${r}" href="#artist-${e.id}" aria-label="Number ${r}: ${esc(e.title)} by ${esc(e.artist)}">
-      <span class="th" style="${bg}"><span class="ini">${e.poster ? '' : esc(initials(e.artist))}</span><span class="rk">#${r}</span>${e.url ? '<span class="pl">▶</span>' : ''}</span>
-      <span style="display:flex;flex-direction:column;gap:4px;min-width:0"><span class="tt">${esc(e.title)}</span><small>${esc(e.artist)} · ${esc(e.genre)}${e.sample ? ' · example' : ''}</small>
-      <span class="sc"><span>Score <b>${overall(e).toFixed(1)}</b></span><span>Record <b>${e.w}–${e.l}</b></span>${r <= 3 && PRIZES[r-1] ? `<span>Prize <b>${money(PRIZES[r-1].amt)}</b></span>` : ''}</span></span></a>`; }).join('');
+      <span class="th" style="${bg}">${e.type === 'video' ? `<video src="${e.url}" muted playsinline preload="metadata" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></video>` : `<span class="ini">${esc(initials(e.artist))}</span>`}<span class="rk">#${r}</span><span class="pl">▶</span></span>
+      <span style="display:flex;flex-direction:column;gap:4px;min-width:0"><span class="tt">${esc(e.title)}</span><small>${esc(e.artist)} · ${esc(e.genre)}</small>
+      <span class="sc"><span>Score <b>${overall(e).toFixed(1)}</b></span><span>Record <b>${e.w}–${e.l}</b></span>${PRIZES[r-1] ? `<span>Prize <b>${money(PRIZES[r-1].amt)}</b></span>` : ''}</span></span></a>`; }).join('');
 }
+
 function renderCountdown(){
   const el = $('#countdown'); if (!el) return; const R = ROUNDS[curRoundIdx()], end = new Date(R.end + 'T23:59:59'), ms = end - new Date();
   if (ms <= 0) { el.innerHTML = `<b>${esc(R.name.split(' · ')[0])}</b> has ended`; return; }
