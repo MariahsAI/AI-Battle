@@ -808,10 +808,17 @@ input[type=range]{padding:0;accent-color:var(--accent)}
 
   <!-- CHANNEL -->
   <section class="view sec" id="v-channel" hidden>
+    <div class="ch-intro">
+      <video id="chIntro" playsinline preload="auto"></video>
+      <div class="ch-intro-ui">
+        <span class="label-badge ch-live">● Season 1 · Opening Night</span>
+        <div class="row"><button type="button" class="btn ghost" id="chIntroSound">🔊 Sound on</button><button type="button" class="btn ghost" id="chIntroReplay">↺ Replay</button><button type="button" class="btn gold" id="chIntroGo">▶ Start watching</button></div>
+      </div>
+    </div>
     <div class="ch-head">
       <img class="logo-img" id="chLogo" alt="">
       <div class="t"><div class="eyebrow">Official channel · streaming on AI Battles</div><h2 class="chrome">AI Battles Channel</h2><div class="meta" id="chSubs"></div></div>
-      <div class="row"><button class="btn ghost" type="button" id="chReplay">↺ Replay opener</button><button class="btn gold" type="button" id="chSub">Subscribe</button></div>
+      <button class="btn gold" type="button" id="chSub">Subscribe</button>
     </div>
     <div class="ch-main">
       <div>
@@ -2791,34 +2798,37 @@ if (location.protocol.startsWith('http')) fetch('videos.json', {cache:'no-cache'
 renderFeatured(); renderTop3(); renderCountdown();
 
 
-/* ---------- Full-screen openers: logo reveal for the site, arena countdown for the Channel ---------- */
+/* ---------- Site opener (full-screen logo reveal) + Channel banner (arena countdown) ---------- */
 (function(){
-  const ov = $('#introOv'), isnd = $('#introSnd'), VIDS = {site:$('#introVid'), channel:$('#arenaVid')};
-  if (!ov || !VIDS.site || !VIDS.channel) return;
-  let cur = null;
-  const setISnd = () => { if (cur) isnd.textContent = cur.muted ? '🔊 Sound on' : '🔇 Sound off'; };
-  const end = () => { if (!cur) return; const v = cur; cur = null; v.pause(); ov.classList.add('fade'); setTimeout(() => { ov.hidden = true; ov.classList.remove('fade'); v.hidden = true; }, 500); };
-  /* withSound only works inside a tap (browser rule); otherwise it plays muted, or skips if even that is blocked. */
-  const show = (which, withSound) => {
+  const ov = $('#introOv'), isnd = $('#introSnd'), sv = $('#introVid'), store = $('#arenaVid');
+  const hv = $('#chIntro'), hsnd = $('#chIntroSound');
+  if (!ov || !sv || !hv || !store) return;
+  hv.src = store.getAttribute('src'); hv.poster = store.getAttribute('poster') || '';
+  /* site opener */
+  let on = false;
+  const setISnd = () => { isnd.textContent = sv.muted ? '🔊 Sound on' : '🔇 Sound off'; };
+  const endOpener = () => { if (!on) return; on = false; sv.pause(); ov.classList.add('fade'); setTimeout(() => { ov.hidden = true; ov.classList.remove('fade'); }, 500); if (curView() === 'channel') playHero(false); };
+  const showOpener = () => { on = true; sv.hidden = false; ov.hidden = false; sv.muted = true; setISnd(); try { sv.currentTime = 0; } catch(_){} const pr = sv.play(); if (pr && pr.catch) pr.catch(() => endOpener()); };
+  sv.addEventListener('ended', endOpener); $('#introSkip').addEventListener('click', endOpener);
+  isnd.addEventListener('click', () => { sv.muted = !sv.muted; setISnd(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && on) endOpener(); });
+  /* channel banner */
+  const setH = () => { hsnd.textContent = hv.muted ? '🔊 Sound on' : '🔇 Sound off'; };
+  function playHero(withSound){
     if (typeof pausePlayer === 'function') pausePlayer();
-    document.querySelectorAll('video').forEach(x => { if (x !== VIDS.site && x !== VIDS.channel) x.pause(); });
-    if (cur) cur.pause(); Object.values(VIDS).forEach(x => x.hidden = true);
-    const v = VIDS[which]; cur = v; v.hidden = false; ov.hidden = false; ov.classList.remove('fade');
-    try { v.currentTime = 0; } catch(_){}
-    v.muted = !withSound; setISnd();
-    const pr = v.play();
-    if (pr && pr.catch) pr.catch(() => { v.muted = true; setISnd(); const p2 = v.play(); if (p2 && p2.catch) p2.catch(() => end()); });
-  };
-  Object.values(VIDS).forEach(v => v.addEventListener('ended', end));
-  $('#introSkip').addEventListener('click', end);
-  isnd.addEventListener('click', () => { if (!cur) return; cur.muted = !cur.muted; setISnd(); });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape' && cur) end(); });
-  document.addEventListener('click', e => { const a = e.target.closest('a[href="#channel"]'); if (a && curView() !== 'channel') show('channel', true); }, true);
-  $('#chReplay').addEventListener('click', () => show('channel', true));
-  window.addEventListener('hashchange', () => { if (curView() !== 'channel' && cur === VIDS.channel) end(); });
-  /* Site opener: once per visit. */
+    try { hv.currentTime = 0; } catch(_){}
+    hv.muted = !withSound; setH();
+    const pr = hv.play(); if (pr && pr.catch) pr.catch(() => { hv.muted = true; setH(); hv.play().catch(() => {}); });
+  }
+  /* A tap on any "Channel" link starts the banner right away, with sound. */
+  document.addEventListener('click', e => { const a = e.target.closest('a[href="#channel"]'); if (a && curView() !== 'channel') { if (on) endOpener(); playHero(true); } }, true);
+  hsnd.addEventListener('click', () => { hv.muted = !hv.muted; if (hv.paused) hv.play().catch(() => {}); setH(); });
+  $('#chIntroReplay').addEventListener('click', () => playHero(!hv.muted));
+  $('#chIntroGo').addEventListener('click', () => { hv.pause(); const p = $('.ch-main'); if (p) p.scrollIntoView({behavior:'smooth', block:'start'}); setTimeout(() => $('#chVid').play().catch(() => {}), 450); });
+  window.addEventListener('hashchange', () => { if (curView() !== 'channel') hv.pause(); else if (hv.paused) playHero(false); });
+  /* first load */
   let seen = false; try { seen = sessionStorage.getItem('aib-opener') === '1'; sessionStorage.setItem('aib-opener', '1'); } catch(_){}
-  setTimeout(() => { if (curView() === 'channel') show('channel', false); else if (!seen) show('site', false); }, 150);
+  setTimeout(() => { if (curView() === 'channel') playHero(false); else if (!seen) showOpener(); }, 150);
 })();
 
 route(); renderShared(); newPair();
