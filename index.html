@@ -2832,12 +2832,12 @@ window.addEventListener('hashchange', () => { const v = $('#glamHero'); if (v &&
   const ov = $('#introOv'), isnd = $('#introSnd'), sv = $('#introVid'), store = $('#arenaVid');
   const hv = $('#chIntro'), hsnd = $('#chIntroSound');
   if (!ov || !sv || !hv || !store) return;
-  setVideoSrc(hv, store.getAttribute('src')); hv.poster = store.getAttribute('poster') || ''; setVideoSrc(sv, sv.getAttribute('src'));
+  hv.poster = store.getAttribute('poster') || '';
   /* site opener */
   let on = false;
   const setISnd = () => { isnd.textContent = sv.muted ? '🔊 Sound on' : '🔇 Sound off'; };
   const endOpener = () => { if (!on) return; on = false; sv.pause(); ov.classList.add('fade'); setTimeout(() => { ov.hidden = true; ov.classList.remove('fade'); }, 500); if (curView() === 'channel') playHero(false); };
-  const showOpener = () => { on = true; sv.hidden = false; ov.hidden = false; sv.muted = true; setISnd(); try { sv.currentTime = 0; } catch(_){} const pr = sv.play(); if (pr && pr.catch) pr.catch(() => endOpener()); };
+  const showOpener = () => { if ((sv.getAttribute('src')||'').slice(0,5) === 'data:') setVideoSrc(sv, sv.getAttribute('src')); on = true; sv.hidden = false; ov.hidden = false; sv.muted = true; setISnd(); try { sv.currentTime = 0; } catch(_){} const pr = sv.play(); if (pr && pr.catch) pr.catch(() => endOpener()); };
   sv.addEventListener('ended', endOpener); $('#introSkip').addEventListener('click', endOpener);
   isnd.addEventListener('click', () => { sv.muted = !sv.muted; setISnd(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && on) endOpener(); });
@@ -2852,6 +2852,8 @@ window.addEventListener('hashchange', () => { const v = $('#glamHero'); if (v &&
     if (typeof pausePlayer === 'function') pausePlayer();
     want = true; stuck = 0; lastT = -1;
     hv.muted = !withSound; setH();
+    /* Load the video only once the Channel page is showing (same as Glam Battle). */
+    if (!hv.getAttribute('src')) { setVideoSrc(hv, ARENA); hv.muted = !withSound; kick(); return; }
     if (hv.readyState >= 1) { try { hv.currentTime = 0; } catch(_){} }
     if (hv.error || hv.networkState === 3) { reloadHero(); return; }
     kick();
