@@ -680,6 +680,100 @@ header.top{position:sticky}
 .logo .logo-img,.logo img.logo-img{width:auto;height:46px;border-radius:0;box-shadow:none;object-fit:contain;filter:drop-shadow(0 0 8px rgba(255,190,90,.35))}
 #chLogo{border-radius:50%;object-fit:cover}
 @media (max-width:760px){.logo .logo-img,.logo img.logo-img{width:auto;height:29px}}
+
+/* ---------- Rounds: season journey + bracket ---------- */
+#roundsEl.rounds{display:block;border:0;border-radius:0;overflow:visible}
+.sj{padding:22px 22px 18px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(135deg,rgba(79,211,255,.07),rgba(255,79,198,.07)),var(--panel)}
+.sj-track{position:relative;height:8px;border-radius:99px;background:var(--panel2);margin:6px 8px 26px}
+.sj-track i{position:absolute;inset:0 auto 0 0;border-radius:99px;background:linear-gradient(90deg,#4fd3ff,#a77bff,#ff4fc6);box-shadow:0 0 18px rgba(167,123,255,.6)}
+.sj-now{position:absolute;top:50%;width:18px;height:18px;margin:-9px 0 0 -9px;border-radius:50%;background:#fff;box-shadow:0 0 0 4px rgba(255,79,198,.35),0 0 24px #ff4fc6;animation:sjPulse 1.6s ease-in-out infinite}
+.sj-now span{position:absolute;top:22px;left:50%;transform:translateX(-50%);font:700 10px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:#ff8fdc;white-space:nowrap}
+@keyframes sjPulse{50%{box-shadow:0 0 0 10px rgba(255,79,198,0),0 0 30px #ff4fc6}}
+.sj-stages{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.sj-st{position:relative;padding:14px;border-radius:14px;border:1px solid var(--line);background:var(--panel2);transition:transform .2s,border-color .2s}
+.sj-st:hover{transform:translateY(-3px);border-color:#a77bff}
+.sj-st .sj-ic{font-size:22px;line-height:1;margin-bottom:8px}
+.sj-st .when{font:600 11.5px var(--mono);color:var(--accent)}
+.sj-st h4{margin:6px 0 4px;font-size:15px}
+.sj-st p{margin:0 0 10px;font-size:12.5px;color:var(--muted)}
+.sj-st.done{opacity:.6}
+.sj-st.live{border:1px solid transparent;background:linear-gradient(var(--panel2),var(--panel2)) padding-box,linear-gradient(135deg,#4fd3ff,#ff4fc6) border-box;box-shadow:0 0 28px rgba(255,79,198,.25)}
+.sj-tag{display:inline-flex;gap:6px;align-items:center;font:700 10.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--panel);border:1px solid var(--line);padding:5px 8px;border-radius:99px}
+.sj-tag.done{color:#7ee2a8}
+.sj-tag.live{color:#ff8fdc;border-color:rgba(255,79,198,.5)}
+.sj-tag .dot{width:7px;height:7px;border-radius:50%;background:#ff4fc6;box-shadow:0 0 8px #ff4fc6;animation:sjBlink 1s steps(2) infinite}
+@keyframes sjBlink{50%{opacity:.2}}
+.bk-av{width:24px;height:24px;border-radius:50%;flex:none;display:grid;place-items:center;font:800 10px var(--display);color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.4)}
+.bk-av.q{background:var(--panel2);color:var(--muted);border:1px dashed var(--line)}
+.bracket .match{position:relative;overflow:visible;transition:border-color .2s,box-shadow .2s}
+.bracket .match:hover{border-color:#a77bff;box-shadow:0 0 20px rgba(167,123,255,.25)}
+.bracket .slot:last-child{border-bottom:0}
+.bracket .slot a{font-weight:700}
+.bk-q,.bk-s{animation:bkIn .5s both;animation-delay:var(--d,0s)}
+@keyframes bkIn{from{opacity:0;transform:translateX(-10px)}}
+.bk-q::after,.bk-s::after{content:"";position:absolute;right:-24px;top:50%;width:24px;height:2px;background:linear-gradient(90deg,#4fd3ff,#ff4fc6);opacity:.7}
+.bk-s::before{content:"";position:absolute;left:-24px;top:50%;width:24px;height:2px;background:linear-gradient(90deg,#4fd3ff,#ff4fc6);opacity:.7}
+.bk-champ{position:relative;text-align:center;padding:16px 14px 14px;border-radius:16px;border:1px solid transparent;background:linear-gradient(var(--panel),var(--panel)) padding-box,linear-gradient(135deg,#ffd27a,#ff4fc6,#4fd3ff) border-box;box-shadow:0 0 40px rgba(255,190,90,.18)}
+.bk-champ img{height:86px;width:auto;margin:-2px auto 4px;display:block;filter:drop-shadow(0 0 14px rgba(255,190,90,.45));animation:bkFloat 3s ease-in-out infinite}
+@keyframes bkFloat{50%{transform:translateY(-5px)}}
+.bk-title{font:900 italic 18px var(--display);text-transform:uppercase;letter-spacing:.02em;background:linear-gradient(90deg,#ffd27a,#fff,#ffd27a);-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:10px}
+.bk-champ .match{text-align:left;border-color:#ff4fc6}
+.bk-prizes{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}
+.bk-prizes span{display:flex;flex-direction:column;gap:2px;padding:8px 4px;border-radius:10px;background:var(--panel2);font-size:10.5px;color:var(--muted)}
+.bk-prizes b{font-size:13px;color:var(--fg)}
+.bk-champ .note{margin:10px 0 0;font-size:12px}
+@media (max-width:1000px){.sj-stages{grid-template-columns:1fr 1fr}.sj-st.live{grid-column:1/-1}}
+@media (max-width:560px){.sj{padding:16px}.sj-stages{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.sj-now,.sj-tag .dot,.bk-champ img,.bk-q,.bk-s{animation:none}}
+/* crown only hangs below the header line on the Battle page */
+body:not([data-view="battle"]) .hdr-crown{bottom:4px;height:112px;width:146px}
+
+/* ---------- Rounds broadcast ---------- */
+.rn-hero{position:relative;overflow:hidden;text-align:center;padding:30px 16px 0;border-radius:22px;border:1px solid var(--line);background:radial-gradient(ellipse 60% 90% at 50% 0%,rgba(167,123,255,.28),transparent 70%),linear-gradient(90deg,rgba(79,211,255,.14),rgba(10,8,30,.2) 45%,rgba(10,8,30,.2) 55%,rgba(255,79,198,.14)),var(--panel)}
+.rn-beams i{position:absolute;top:-40%;width:28%;height:180%;filter:blur(30px);opacity:.35;pointer-events:none}
+.rn-beams i:first-child{left:4%;background:linear-gradient(#4fd3ff,transparent);transform:rotate(18deg);animation:rnSweepL 6s ease-in-out infinite}
+.rn-beams i:last-child{right:4%;background:linear-gradient(#ff4fc6,transparent);transform:rotate(-18deg);animation:rnSweepR 6s ease-in-out infinite}
+@keyframes rnSweepL{50%{transform:rotate(-4deg)}}
+@keyframes rnSweepR{50%{transform:rotate(4deg)}}
+.rn-crown{position:relative;height:92px;width:auto;display:block;margin:0 auto 4px;filter:drop-shadow(0 0 18px rgba(255,190,90,.5));animation:bkFloat 3s ease-in-out infinite}
+.rn-hero .eyebrow{position:relative}
+.rn-title{position:relative;font-size:clamp(40px,7vw,76px)!important;line-height:.95;margin:6px 0 4px!important}
+.rn-sub{position:relative;font:700 12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#ff8fdc}
+.rn-clock{position:relative;display:flex;justify-content:center;align-items:flex-start;gap:8px;margin:18px 0 22px}
+.rn-u{min-width:84px;padding:12px 8px 10px;border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.02));border:1px solid var(--line);box-shadow:inset 0 -2px 0 rgba(255,79,198,.35),0 10px 30px rgba(0,0,0,.35)}
+.rn-u b{display:block;font:900 italic clamp(30px,5vw,48px)/1 var(--display);background:linear-gradient(180deg,#fff,#c9b6ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.rn-u small{display:block;margin-top:6px;font:700 10px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.rn-colon{font:900 34px/64px var(--display);color:#a77bff;animation:sjBlink 1s steps(2) infinite}
+.rn-ticker{position:relative;margin:0 -16px;border-top:1px solid var(--line);background:rgba(5,6,18,.6);overflow:hidden;white-space:nowrap;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+.rn-tick{display:inline-flex;gap:46px;padding:11px 0;animation:rnScroll 40s linear infinite}
+.rn-tick span{font:700 12.5px var(--sans,inherit);letter-spacing:.04em;color:var(--fg)}
+@keyframes rnScroll{to{transform:translateX(-50%)}}
+.rn-main{position:relative;padding:22px;border-radius:20px;border:1px solid transparent;background:linear-gradient(var(--panel),var(--panel)) padding-box,linear-gradient(90deg,#4fd3ff,#a77bff,#ff4fc6) border-box;box-shadow:0 0 50px rgba(167,123,255,.15)}
+.rn-vs{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px;margin:14px 0 18px}
+.rn-f{display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;color:var(--fg);padding:14px;border-radius:16px;transition:transform .2s}
+.rn-f:hover{transform:scale(1.04)}
+.rn-f.l{background:radial-gradient(ellipse at center,rgba(79,211,255,.18),transparent 70%)}
+.rn-f.r{background:radial-gradient(ellipse at center,rgba(255,79,198,.18),transparent 70%)}
+.rn-av{width:84px;height:84px;border-radius:50%;display:grid;place-items:center;font:900 italic 30px var(--display);color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.15),0 0 30px rgba(167,123,255,.45)}
+.rn-f.l .rn-av{box-shadow:0 0 0 3px #4fd3ff,0 0 34px rgba(79,211,255,.6)}
+.rn-f.r .rn-av{box-shadow:0 0 0 3px #ff4fc6,0 0 34px rgba(255,79,198,.6)}
+.rn-f b{font:900 italic 22px var(--display);text-transform:uppercase}
+.rn-f small{font-size:12px;color:var(--muted)}
+.rn-x span{display:grid;place-items:center;width:64px;height:64px;border-radius:50%;font:900 italic 24px var(--display);color:#fff;background:linear-gradient(135deg,#4fd3ff,#ff4fc6);box-shadow:0 0 30px rgba(255,79,198,.6);animation:rnPulse 1.8s ease-in-out infinite}
+@keyframes rnPulse{50%{transform:scale(1.1);box-shadow:0 0 50px rgba(79,211,255,.8)}}
+.rn-bar{height:10px;border-radius:99px;background:#ff4fc6;overflow:hidden}
+.rn-bar i{display:block;height:100%;background:linear-gradient(90deg,#4fd3ff,#a77bff);box-shadow:0 0 12px #4fd3ff}
+.rn-pct{display:flex;justify-content:space-between;margin-top:6px;font:700 11px var(--mono);letter-spacing:.06em;color:var(--muted)}
+.rn-cta{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:16px}
+.bk-split{height:4px;background:#ff4fc6}
+.bk-split i{display:block;height:100%;background:linear-gradient(90deg,#4fd3ff,#a77bff)}
+.bk-q::after,.bk-s::after,.bk-s::before{background:linear-gradient(90deg,transparent,#fff,transparent) 0 0/40% 100% no-repeat,linear-gradient(90deg,#4fd3ff,#ff4fc6)!important;animation:bkFlow 1.6s linear infinite}
+@keyframes bkFlow{from{background-position:-60% 0,0 0}to{background-position:160% 0,0 0}}
+.bracket .match.path,.bk-champ.path{border-color:#ffd27a!important;box-shadow:0 0 26px rgba(255,210,122,.45)!important}
+.bracket .match.path::after,.bracket .match.path::before{opacity:1;height:3px}
+.bk-champ{transition:box-shadow .25s}
+@media (max-width:760px){.rn-u{min-width:62px;padding:10px 4px}.rn-colon{line-height:52px;font-size:24px}.rn-vs{gap:6px}.rn-av{width:62px;height:62px;font-size:22px}.rn-f{padding:8px}.rn-f b{font-size:16px}.rn-x span{width:46px;height:46px;font-size:18px}.rn-main{padding:16px}}
+@media (prefers-reduced-motion:reduce){.rn-beams i,.rn-crown,.rn-tick,.rn-x span,.rn-colon,.bk-q::after,.bk-s::after,.bk-s::before{animation:none}}
 </style></head><body>
 
 <header class="top">
@@ -800,8 +894,17 @@ header.top{position:sticky}
 
   <!-- ROUNDS -->
   <section class="view sec" id="v-rounds" hidden>
-    <div><div class="eyebrow">Season format</div><h2>Rounds &amp; bracket</h2></div>
+    <div class="rn-hero">
+      <div class="rn-beams"><i></i><i></i></div>
+      <img class="rn-crown" alt="">
+      <div class="eyebrow">Season 1 · Road to the crown</div>
+      <h2 class="rn-title">Finals Night</h2>
+      <div class="rn-sub">Dec 15 · Live · 8:00 PM ET</div>
+      <div class="rn-clock" id="rnClock"></div>
+      <div class="rn-ticker"><div class="rn-tick" id="rnTick"></div></div>
+    </div>
     <div class="rounds" id="roundsEl"></div>
+    <div class="rn-main" id="rnMain"></div>
     <div class="panel sec" style="gap:14px">
       <div class="row" style="justify-content:space-between">
         <div><div class="eyebrow">Projected knockout bracket</div><h3 style="font-size:20px;margin-top:4px">If Round 1 ended today</h3></div>
@@ -1439,21 +1542,89 @@ function renderDiscover(){
 
 /* ---------- Rounds ---------- */
 function renderRounds(){
-  const ci = curRoundIdx();
-  $('#roundsEl').innerHTML = ROUNDS.map((r,i) => `<div class="rd ${i===ci?'now':''}"><div class="when">${r.when}</div><h4>${r.name}</h4><p>${r.desc}</p>${i===ci?'<p style="color:var(--accent);margin-top:6px;font-weight:700">Live now</p>':''}</div>`).join('');
+  const ci = curRoundIdx(), now = new Date();
+  const t0 = new Date(ROUNDS[0].start+'T00:00:00'), t1 = new Date(ROUNDS.at(-1).end+'T23:59:59');
+  // position of "today" along the track, by stage (each stage = equal width)
+  const r0 = ROUNDS[ci], rs = new Date(r0.start+'T00:00:00'), re = new Date(r0.end+'T23:59:59');
+  const frac = Math.min(1, Math.max(0, (now - rs) / Math.max(1, re - rs)));
+  const pos = Math.min(100, ((ci + frac) / ROUNDS.length) * 100);
+  const left = ms => { ms = Math.max(0, ms); const d = Math.floor(ms/864e5), h = Math.floor(ms/36e5)%24, m = Math.floor(ms/6e4)%60; return d ? `${d}d ${h}h` : `${h}h ${m}m`; };
+  const icons = ['⚔️','🔥','🎯','⚡','👑'];
+  $('#roundsEl').innerHTML = `
+    <div class="sj">
+      <div class="sj-track"><i style="width:${pos}%"></i><b class="sj-now" style="left:${pos}%"><span>Today</span></b></div>
+      <div class="sj-stages">${ROUNDS.map((r,i) => {
+        const st = i < ci ? 'done' : i === ci ? 'live' : 'next';
+        const sStart = new Date(r.start+'T00:00:00'), sEnd = new Date(r.end+'T23:59:59');
+        const meta = st==='done' ? '<span class="sj-tag done">✓ Complete</span>'
+          : st==='live' ? `<span class="sj-tag live"><span class="dot"></span>Live · ends in ${left(sEnd-now)}</span>`
+          : `<span class="sj-tag">Starts in ${left(sStart-now)}</span>`;
+        return `<div class="sj-st ${st}"><div class="sj-ic">${icons[i]}</div><div class="when">${r.when}</div><h4>${r.name}</h4><p>${r.desc}</p>${meta}</div>`;
+      }).join('')}</div>
+    </div>`;
   const r = ranked().slice(0,8);
-  const slot = (e,seed) => e ? `<div class="slot"><span class="seed">${seed}</span><a href="#artist-${e.id}">${esc(e.artist)}</a><span class="sc">${overall(e).toFixed(1)}</span></div>` : `<div class="slot"><span class="seed">–</span><span class="tbd">TBD</span></div>`;
+  const av = e => `<span class="bk-av" style="background:linear-gradient(135deg,hsl(${e.hue[0]} 75% 55%),hsl(${e.hue[1]} 70% 30%))">${esc((e.artist||'?').split(/\s+/).map(w=>w[0]).join('').slice(0,2))}</span>`;
+  const slot = (e,seed) => e ? `<div class="slot"><span class="seed">${seed}</span>${av(e)}<a href="#artist-${e.id}">${esc(e.artist)}</a><span class="sc">${overall(e).toFixed(1)}</span></div>` : `<div class="slot"><span class="seed">–</span><span class="tbd">TBD</span></div>`;
+  const tbd = t => `<div class="slot"><span class="seed">?</span><span class="bk-av q">?</span><span class="tbd">${t}</span></div>`;
   const qf = [[0,7],[3,4],[1,6],[2,5]];
+  const crown = ($('.hdr-crown')||{}).src || '';
   $('#bracket').innerHTML = `
-    <div class="bcol"><h4>Quarterfinals · Dec 1–7</h4>${qf.map(([a,b]) => `<div class="match">${slot(r[a],a+1)}${slot(r[b],b+1)}</div>`).join('')}</div>
+    <div class="bcol"><h4>Quarterfinals · Dec 1–7</h4>${qf.map(([a,b],k) => `<div class="match bk-q" style="--d:${k*.08}s">${slot(r[a],a+1)}${slot(r[b],b+1)}</div>`).join('')}</div>
     <div class="bcol"><h4>Semifinals · Dec 8–12</h4>
-      <div class="match"><div class="slot"><span class="seed">–</span><span class="tbd">Winner QF1 (1v8)</span></div><div class="slot"><span class="seed">–</span><span class="tbd">Winner QF2 (4v5)</span></div></div>
-      <div class="match"><div class="slot"><span class="seed">–</span><span class="tbd">Winner QF3 (2v7)</span></div><div class="slot"><span class="seed">–</span><span class="tbd">Winner QF4 (3v6)</span></div></div></div>
+      <div class="match bk-s">${tbd('Winner QF1 (1 v 8)')}${tbd('Winner QF2 (4 v 5)')}</div>
+      <div class="match bk-s">${tbd('Winner QF3 (2 v 7)')}${tbd('Winner QF4 (3 v 6)')}</div></div>
     <div class="bcol final"><h4>Finals night · Dec 15 live</h4>
-      <div class="match"><div class="slot"><span class="seed">–</span><span class="tbd">Semifinal winner 1</span></div><div class="slot"><span class="seed">–</span><span class="tbd">Semifinal winner 2</span></div></div>
-      <p class="note">Losing semifinalists battle for 3rd place on finals night. Final 3 go to the label showcase.</p></div>`;
+      <div class="bk-champ">
+        ${crown ? `<img src="${crown}" alt="">` : ''}
+        <div class="bk-title">Season 1 Champion</div>
+        <div class="match">${tbd('Semifinal winner 1')}${tbd('Semifinal winner 2')}</div>
+        <div class="bk-prizes">${PRIZES.map((p,i)=>`<span><b>${['🥇','🥈','🥉'][i]} ${money(p.amt)}</b>${p.place}</span>`).join('')}</div>
+        <p class="note">Losing semifinalists battle for 3rd on finals night. The Final 3 go to the major-label showcase.</p>
+      </div></div>`;
+  renderRoundsExtras();
 }
 
+
+/* ---------- Rounds: broadcast extras ---------- */
+function rnClockTick(){
+  const el = document.getElementById('rnClock'); if (!el || el.offsetParent === null) return;
+  let ms = Math.max(0, FINALS - new Date());
+  const u = [['Days',864e5],['Hours',36e5],['Min',6e4],['Sec',1e3]].map(([l,d]) => { const v = Math.floor(ms/d); ms -= v*d; return [l,v]; });
+  el.innerHTML = u.map(([l,v]) => `<div class="rn-u"><b>${String(v).padStart(2,'0')}</b><small>${l}</small></div>`).join('<span class="rn-colon">:</span>');
+}
+setInterval(rnClockTick, 1000);
+function renderRoundsExtras(){
+  const c = document.querySelector('.rn-crown'), h = document.querySelector('.hdr-crown'); if (c && h) c.src = h.src;
+  const r = ranked();
+  const tot = r.reduce((n,e) => n + (e.w||0) + (e.l||0), 0);
+  const items = [
+    `👑 ${esc(r[0]?.artist||'')} holds the #1 seed at ${r[0]?overall(r[0]).toFixed(1):''}`,
+    `⚔️ Main event: ${esc(r[0]?.artist||'')} vs ${esc(r[7]?.artist||'')}`,
+    `🔥 ${r.length} artists battling for 16 spots`,
+    `🗳️ ${tot.toLocaleString('en-US')} head-to-head battles fought`,
+    `💰 ${money(PRIZES.reduce((n,p)=>n+p.amt,0))} in cash + a major-label showcase`,
+    `⚡ Round 2 judges start scoring Nov 22`
+  ].map(t => `<span>${t}</span>`).join('');
+  document.getElementById('rnTick').innerHTML = items + items;
+  const A = r[0], B = r[7];
+  if (A && B) {
+    const sa = overall(A), sb = overall(B), pa = Math.round(sa/(sa+sb)*100);
+    const face = (e,side) => `<a class="rn-f ${side}" href="#artist-${e.id}"><span class="rn-av" style="background:linear-gradient(135deg,hsl(${e.hue[0]} 80% 58%),hsl(${e.hue[1]} 70% 28%))">${esc(e.artist.split(/\s+/).map(w=>w[0]).join('').slice(0,2))}</span><b>${esc(e.artist)}</b><small>Seed #${side==='l'?1:8} · ${esc(e.genre||'')} · ${overall(e).toFixed(1)}</small></a>`;
+    document.getElementById('rnMain').innerHTML = `<div class="eyebrow">Projected main event · Quarterfinal 1</div>
+      <div class="rn-vs">${face(A,'l')}<div class="rn-x"><span>VS</span></div>${face(B,'r')}</div>
+      <div class="rn-odds"><div class="rn-bar"><i style="width:${pa}%"></i></div><div class="rn-pct"><span>${pa}% win chance</span><span>${100-pa}%</span></div></div>
+      <div class="rn-cta"><a class="btn gold" href="#battle">⚡ Vote in today’s battles</a><a class="btn ghost" href="#leaderboard">See full standings</a></div>`;
+  }
+  // bracket path highlight
+  const bq = [...document.querySelectorAll('#bracket .bk-q')], bs = [...document.querySelectorAll('#bracket .bk-s')], fin = document.querySelector('#bracket .bk-champ');
+  bq.forEach((m,k) => {
+    const on = v => { m.classList.toggle('path', v); bs[k>>1]?.classList.toggle('path', v); fin?.classList.toggle('path', v); };
+    m.onmouseenter = () => on(true); m.onmouseleave = () => on(false);
+  });
+  // win split bar on each quarterfinal
+  bq.forEach(m => { const sc = [...m.querySelectorAll('.sc')].map(x => +x.textContent); if (sc.length===2 && !m.querySelector('.bk-split')) { const pa = Math.round(sc[0]/(sc[0]+sc[1])*100); m.insertAdjacentHTML('beforeend', `<div class="bk-split" title="Projected win chance"><i style="width:${pa}%"></i></div>`); } });
+  rnClockTick();
+}
 /* ---------- Leaderboard ---------- */
 function renderBoard(){
   const r = ranked();
@@ -1656,6 +1827,7 @@ function curView(){ const h = location.hash.slice(1); if (h === 'library') { DTA
 function route(){
   const v = curView();
   const sv = v === 'join' ? 'account' : v;
+  document.body.dataset.view = v;
   document.querySelectorAll('.view').forEach(s => s.hidden = s.id !== 'v-'+sv);
   $('#heroWrap').hidden = v !== 'battle';
   if (!$('#heroWrap').hidden) drawWaves();
